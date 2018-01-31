@@ -32,7 +32,13 @@ namespace NintendoSpy.Readers
             state.SetAnalog ("stick_x", readStick (SignalTool.readByte (packet, BUTTONS.Length    )));
             state.SetAnalog ("stick_y", readStick (SignalTool.readByte (packet, BUTTONS.Length + 8)));
 
-            return state.Build ();
+            byte[] newPacket = new byte[4];
+            newPacket[0] = SignalTool.readByte(packet, 0);
+            newPacket[1] = SignalTool.readByte(packet, 8);
+            newPacket[2] = SignalTool.readByte(packet, 16);
+            newPacket[3] = SignalTool.readByte(packet, 24);
+
+            return state.Build (newPacket);
         }
     }
 }

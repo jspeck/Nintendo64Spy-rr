@@ -19,8 +19,14 @@ namespace NintendoSpy.Readers
             _analogs [name] = value;
         }
 
-        public ControllerState Build () {
-            return new ControllerState (_buttons, _analogs);
+        public ControllerState Build(byte[] packet)
+        {
+            return new ControllerState(_buttons, _analogs, packet);
+        }
+
+        public ControllerState Build()
+        {
+            return new ControllerState(_buttons, _analogs);
         }
     }
 }

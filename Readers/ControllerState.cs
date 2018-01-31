@@ -7,13 +7,23 @@ namespace NintendoSpy.Readers
 {
     public class ControllerState
     {
+
+
         static public readonly ControllerState Zero = new ControllerState
-            (new Dictionary <string, bool> (), new Dictionary <string, float> ());
+            (new Dictionary <string, bool> (), new Dictionary <string, float> (), new byte[32]);
 
         public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
         public IReadOnlyDictionary <string, float> Analogs { get; private set;  }
+        public byte[] Packet { get; private set; }
 
-        public ControllerState (IReadOnlyDictionary <string, bool> buttons, IReadOnlyDictionary <string, float> analogs)
+        public ControllerState(IReadOnlyDictionary<string, bool> buttons, IReadOnlyDictionary<string, float> analogs, byte[] packet)
+        {
+            Buttons = buttons;
+            Analogs = analogs;
+            Packet = packet;
+        }
+
+        public ControllerState(IReadOnlyDictionary<string, bool> buttons, IReadOnlyDictionary<string, float> analogs)
         {
             Buttons = buttons;
             Analogs = analogs;

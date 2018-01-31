@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NintendoSpy.Readers;
 
 namespace NintendoSpy
 {
     class M64
     {
         string fileName = "test.m64";
+        BinaryWriter writer;
 
         int signature = 0x1A34364D;        // 0x4D36341A 
         int version = 3;
@@ -35,9 +37,14 @@ namespace NintendoSpy
         string author = "minikori deftek";                    // 222-byte utf-8 string
         string movieDescription = "tests";                    // 256-byte utf-8 string
 
-        public M64(string _filename)
+        public M64(string _filename, IControllerReader reader)
         {
             fileName = _filename;
+
+            writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
+
+            reader.ControllerStateChanged += reader_ControllerStateChanged;
+
             createFile();
         }
 
@@ -53,52 +60,49 @@ namespace NintendoSpy
 
         private void createFile()
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+            writer.Write(signature);
+            writer.Write(version);
+            writer.Write(uid);
+            writer.Write(numberOfFrames);
+            writer.Write(rerecordCount);
+            writer.Write(fps);
+            writer.Write(numberOfControllers);
+            writer.Write(reserve1);
+            writer.Write(numInputSamples);
+            writer.Write(movieStartType);
+            writer.Write(reserve2);
+            writer.Write(controllerFlags);
+
+            for (int i = 0; i < 40; i++)
             {
-                writer.Write(signature);
-                writer.Write(version);
-                writer.Write(uid);
-                writer.Write(numberOfFrames);
-                writer.Write(rerecordCount);
-                writer.Write(fps);
-                writer.Write(numberOfControllers);
-                writer.Write(reserve1);
-                writer.Write(numInputSamples);
-                writer.Write(movieStartType);
-                writer.Write(reserve2);
-                writer.Write(controllerFlags);
-
-                for (int i = 0; i < 40; i++)
-                {
-                    writer.Write(reserve3);
-                }
-
-                writer.Write(ASCIIToByteArray(internalNameROM, 32));
-                writer.Write(CRC32);
-                writer.Write(countryCode);
-
-                for (int i = 0; i < 14; i++)
-                {
-                    writer.Write(reserve4);
-                }
-
-                writer.Write(ASCIIToByteArray(videoPlugin, 64));
-                writer.Write(ASCIIToByteArray(soundPlugin, 64));
-                writer.Write(ASCIIToByteArray(inputPlugin, 64));
-                writer.Write(ASCIIToByteArray(rspPlugin, 64));
-                writer.Write(UTF8ToByteArray(author, 222));
-                writer.Write(UTF8ToByteArray(movieDescription, 256));
-
-
+                writer.Write(reserve3);
             }
+
+            writer.Write(ASCIIToByteArray(internalNameROM, 32));
+            writer.Write(CRC32);
+            writer.Write(countryCode);
+
+            for (int i = 0; i < 14; i++)
+            {
+                writer.Write(reserve4);
+            }
+
+            writer.Write(ASCIIToByteArray(videoPlugin, 64));
+            writer.Write(ASCIIToByteArray(soundPlugin, 64));
+            writer.Write(ASCIIToByteArray(inputPlugin, 64));
+            writer.Write(ASCIIToByteArray(rspPlugin, 64));
+            writer.Write(UTF8ToByteArray(author, 222));
+            writer.Write(UTF8ToByteArray(movieDescription, 256));
+        }
+
+        void reader_ControllerStateChanged(IControllerReader reader, ControllerState newState)
+        {
+            writePacket(newState.Packet);
         }
 
         public void writePacket(byte[] packet)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Open)))
-            {
-                writer.Write(packet);
-            }
+            writer.Write(packet);
         }
 
     }
