@@ -35,6 +35,12 @@ namespace NintendoSpy
         string author = "minikori deftek";                    // 222-byte utf-8 string
         string movieDescription = "tests";                    // 256-byte utf-8 string
 
+        public M64(string _filename)
+        {
+            fileName = _filename;
+            createFile();
+        }
+
         private static byte[] ASCIIToByteArray(string str, int length)
         {
             return Encoding.ASCII.GetBytes(str.PadRight(length, '\0'));
@@ -45,7 +51,7 @@ namespace NintendoSpy
             return Encoding.UTF8.GetBytes(str.PadRight(length, '\0'));
         }
 
-        public void createFile()
+        private void createFile()
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
             {
