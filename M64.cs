@@ -12,12 +12,13 @@ namespace NintendoSpy
     {
         string fileName = "test.m64";
         BinaryWriter writer;
+        int numOfWrites = 0;
 
         int signature = 0x1A34364D;        // 0x4D36341A 
         int version = 3;
         int uid = 1474960799;
         int numberOfFrames = 15678;
-        int rerecordCount = 164623;
+        int rerecordCount = 1;
         byte fps = 60;
         byte numberOfControllers = 1;
         short reserve1 = 0;
@@ -37,9 +38,9 @@ namespace NintendoSpy
         string author = "minikori deftek";                    // 222-byte utf-8 string
         string movieDescription = "tests";                    // 256-byte utf-8 string
 
-        public M64(string _filename, IControllerReader reader)
+        public M64(string _fileName, IControllerReader reader)
         {
-            fileName = _filename;
+            fileName = _fileName;
 
             writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
 
@@ -103,6 +104,15 @@ namespace NintendoSpy
         public void writePacket(byte[] packet)
         {
             writer.Write(packet);
+            numOfWrites++;
+        }
+
+        public void Close()
+        {
+            writer.Seek(12, SeekOrigin.Begin);      // number of frames?
+            writer.Write((numOfWrites/2));
+
+            writer.Close();
         }
 
     }
