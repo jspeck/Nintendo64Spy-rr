@@ -11,7 +11,7 @@ namespace NintendoSpy
     public class SerialMonitor
     {
         const int BAUD_RATE = 115200;
-        const int TIMER_MS  = 30;
+        const int TIMER_MS  = 10;       // originally 30
 
         public event PacketEventHandler PacketReceived;
         public event EventHandler Disconnected;
@@ -35,7 +35,7 @@ namespace NintendoSpy
             _datPort.Open ();
 
             _timer = new DispatcherTimer ();
-            _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS); 
+            _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS);
             _timer.Tick += tick;
             _timer.Start ();
         }

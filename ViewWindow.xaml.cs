@@ -24,6 +24,8 @@ namespace NintendoSpy
         Keybindings _keybindings;
         BlinkReductionFilter _blinkFilter = new BlinkReductionFilter ();
 
+        M64 m64;
+
         List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
         List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
         List <Tuple <Skin.AnalogStick,Image>> _sticksWithImages = new List <Tuple <Skin.AnalogStick,Image>> ();
@@ -130,7 +132,7 @@ namespace NintendoSpy
                     ControllerGrid.Children.Add(image);
                 }
             }
-            
+
             foreach (var stick in _skin.AnalogSticks) {
                 if (bgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
                 {
@@ -143,7 +145,7 @@ namespace NintendoSpy
             _reader.ControllerStateChanged += reader_ControllerStateChanged;
             _reader.ControllerDisconnected += reader_ControllerDisconnected;
 
-            new M64("test.m64", _reader);
+            m64 = new M64("test.m64", _reader);
 
             try {
                 _keybindings = new Keybindings (Keybindings.XML_FILE_PATH, _reader);
@@ -184,12 +186,12 @@ namespace NintendoSpy
             var img = new Image ();
             img.VerticalAlignment = VerticalAlignment.Top;
 
-            img.HorizontalAlignment = 
+            img.HorizontalAlignment =
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Left
                 ? HorizontalAlignment.Right
                 : HorizontalAlignment.Left;
 
-            img.VerticalAlignment = 
+            img.VerticalAlignment =
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Up
                 ? VerticalAlignment.Bottom
                 : VerticalAlignment.Top;
@@ -199,7 +201,7 @@ namespace NintendoSpy
             img.Margin = new Thickness (0, 0, 0, 0);
             img.Width = trigger.Config.Width;
             img.Height = trigger.Config.Height;
-            
+
 
             var grid = new Grid ();
 
@@ -261,20 +263,21 @@ namespace NintendoSpy
                 _keybindings.Finish ();
             }
             _reader.Finish ();
+            m64.Close();
         }
 
         void reader_ControllerStateChanged (IControllerReader reader, ControllerState newState)
         {
             newState = _blinkFilter.Process (newState);
 
-            foreach (var button in _buttonsWithImages) 
+            foreach (var button in _buttonsWithImages)
             {
                 if (!newState.Buttons.ContainsKey (button.Item1.Name)) continue;
 
                 button.Item2.Visibility = newState.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
             }
 
-            foreach (var button in _rangeButtonsWithImages) 
+            foreach (var button in _rangeButtonsWithImages)
             {
                 if (!newState.Analogs.ContainsKey (button.Item1.Name)) continue;
 
@@ -299,10 +302,10 @@ namespace NintendoSpy
                 var y = newState.Analogs.ContainsKey (skin.YName)
                       ? skin.Config.Y + yrange * newState.Analogs [skin.YName]
                       : skin.Config.Y ;
-                
+
                 image.Margin = new Thickness (x,y,0,0);
             }
-            
+
             foreach (var trigger in _triggersWithGridImages)
             {
                 var skin = trigger.Item1;
@@ -314,7 +317,7 @@ namespace NintendoSpy
                 if (skin.UseNegative) val *= -1;
                 if (skin.IsReversed) val = 1 - val;
                 if (val < 0) val = 0;
-                switch (skin.Direction) 
+                switch (skin.Direction)
                 {
                     case Skin.AnalogTrigger.DirectionValue.Right:
                         grid.Width = skin.Config.Width * val;
@@ -347,6 +350,6 @@ namespace NintendoSpy
             if (PropertyChanged != null) PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
         }
 
-        
+
     }
 }

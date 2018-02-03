@@ -14,7 +14,7 @@ namespace NintendoSpy
         BinaryWriter writer;
         int numOfWrites = 0;
 
-        int signature = 0x1A34364D;        // 0x4D36341A 
+        int signature = 0x1A34364D;        // 0x4D36341A
         int version = 3;
         int uid = 1474960799;
         int numberOfFrames = 15678;
@@ -103,6 +103,7 @@ namespace NintendoSpy
 
         public void writePacket(byte[] packet)
         {
+            writer.Flush();
             writer.Write(packet);
             numOfWrites++;
         }
@@ -110,7 +111,7 @@ namespace NintendoSpy
         public void Close()
         {
             writer.Seek(12, SeekOrigin.Begin);      // number of frames?
-            writer.Write((numOfWrites/2));
+            //writer.Write((numOfWrites));
 
             writer.Close();
         }
