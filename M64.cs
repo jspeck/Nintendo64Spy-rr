@@ -13,6 +13,7 @@ namespace NintendoSpy
         string fileName = "test.m64";
         BinaryWriter writer;
         int numOfWrites = 0;
+        byte[] lastPacket = new byte[4];
 
         int signature = 0x1A34364D;        // 0x4D36341A
         int version = 3;

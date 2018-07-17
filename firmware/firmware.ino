@@ -6,7 +6,7 @@
 
 // ---------- Uncomment one of these options to select operation mode --------------
 //#define MODE_GC
-//#define MODE_N64
+#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
 // Bridge one of the analog GND to the right analog IN to enable your selected mode
@@ -18,6 +18,7 @@
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 
+#define SERIAL_BUFFER_SIZE 256
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
@@ -51,7 +52,7 @@
 
 
 // Declare some space to store the bits we read from a controller.
-unsigned char rawData[ 128 ];
+unsigned char rawData[ 1024 ];
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

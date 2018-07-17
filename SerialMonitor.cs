@@ -10,8 +10,9 @@ namespace NintendoSpy
 
     public class SerialMonitor
     {
+        StreamWriter writetext = new StreamWriter(File.Open("debug.txt", FileMode.Create));
         const int BAUD_RATE = 115200;
-        const int TIMER_MS  = 10;       // originally 30
+        const int TIMER_MS  = 1;       // originally 30
 
         public event PacketEventHandler PacketReceived;
         public event EventHandler Disconnected;
@@ -63,6 +64,8 @@ namespace NintendoSpy
             // If there's an IOException then the device has been disconnected.
             try {
                 int readCount = _datPort.BytesToRead;
+                writetext.Flush();
+                writetext.WriteLine(readCount);
                 if (readCount < 1) return;
                 byte[] readBuffer = new byte [readCount];
                 _datPort.Read (readBuffer, 0, readCount);
@@ -71,6 +74,7 @@ namespace NintendoSpy
             }
             catch (IOException) {
                 Stop ();
+                writetext.Close();
                 if (Disconnected != null) Disconnected (this, EventArgs.Empty);
                 return;
             }
