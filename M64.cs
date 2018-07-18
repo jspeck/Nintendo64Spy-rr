@@ -18,12 +18,12 @@ namespace NintendoSpy
         int signature = 0x1A34364D;        // 0x4D36341A
         int version = 3;
         int uid = 1474960799;
-        int numberOfFrames = 200000;
+        int numberOfFrames = 200000;       // placeholder
         int rerecordCount = 1;
         byte fps = 60;
         byte numberOfControllers = 1;
         short reserve1 = 0;
-        int numInputSamples = 100000;
+        int numInputSamples = 100000;       // placeholder
         short movieStartType = 2;
         short reserve2 = 0;
         int controllerFlags = 1;

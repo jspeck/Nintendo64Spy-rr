@@ -1,3 +1,5 @@
+#	Arduino Uno
+
 #define SERIAL_BUFFER_SIZE 256
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
