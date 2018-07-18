@@ -1,4 +1,4 @@
-#	Arduino Uno
+//	Arduino Uno
 
 #define SERIAL_BUFFER_SIZE 256
 

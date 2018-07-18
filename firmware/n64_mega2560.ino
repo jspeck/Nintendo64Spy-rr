@@ -1,4 +1,4 @@
-#	Arduino Mega 2560
+//	Arduino Mega 2560
 
 #define SERIAL_BUFFER_SIZE 256
 
