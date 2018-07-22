@@ -11,9 +11,8 @@ namespace NintendoSpy
 
     public class SerialMonitor
     {
-        //StreamWriter debug = new StreamWriter(File.Open("debug.txt", FileMode.Create));
         const int BAUD_RATE = 115200;
-        const int TIMER_MS  = 5;       // originally 30
+        const int TIMER_MS = 5;
 
         byte[] packet = new byte[4];
         byte[] translatedPacket = new byte[32];
@@ -81,17 +80,14 @@ namespace NintendoSpy
                 _datPort.Read (readBuffer, 0, 4);
                 _datPort.DiscardInBuffer ();
                 _localBuffer.AddRange (readBuffer);
-                //debug.WriteLine(((int)readBuffer[0]).ToString() + "\t" + ((int)readBuffer[1]).ToString() + "\t" + ((int)readBuffer[2]).ToString() + "\t" + ((int)readBuffer[3]).ToString());
             }
             catch (IOException) {
                 Stop ();
-                //debug.Close();
                 if (Disconnected != null) Disconnected (this, EventArgs.Empty);
                 return;
             }
 
             packet = _localBuffer.GetRange(0, 4).ToArray();
-            //debug.WriteLine(((int)packet[0]).ToString() + "\t" + ((int)packet[1]).ToString() + "\t" + ((int)packet[2]).ToString() + "\t" + ((int)packet[3]).ToString());
 
             // 2 3 0 1
             translatedPacket[0] = (byte)((packet[2] & 128) >> 7);

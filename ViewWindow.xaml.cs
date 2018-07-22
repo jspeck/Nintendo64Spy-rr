@@ -145,7 +145,7 @@ namespace NintendoSpy
             _reader.ControllerStateChanged += reader_ControllerStateChanged;
             _reader.ControllerDisconnected += reader_ControllerDisconnected;
 
-            m64 = new M64("test.m64", _reader);
+            m64 = new M64("movie", _reader);
 
             try {
                 _keybindings = new Keybindings (Keybindings.XML_FILE_PATH, _reader);

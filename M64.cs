@@ -10,7 +10,8 @@ namespace NintendoSpy
 {
     class M64
     {
-        string fileName = "test.m64";
+        string fileName = "movie";
+        int fileNumber = 0;
         BinaryWriter writer;
         int numOfWrites = 0;
         byte[] lastPacket = new byte[4];
@@ -41,7 +42,11 @@ namespace NintendoSpy
 
         public M64(string _fileName, IControllerReader reader)
         {
-            fileName = _fileName;
+            while(File.Exists(_fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64")){
+                fileNumber++;
+            }
+
+            fileName = _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64";
 
             writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
 

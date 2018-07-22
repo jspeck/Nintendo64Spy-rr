@@ -103,6 +103,9 @@
     <Compile Include="Readers\SignalTool.cs" />
     <Compile Include="Skin.cs" />
     <Compile Include="ConfigParseException.cs" />
+    <Compile Include="TasWindow.xaml.cs">
+      <DependentUpon>TasWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewWindow.xaml.cs">
       <DependentUpon>ViewWindow.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <DependentUpon>SetupWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TasWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ViewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
