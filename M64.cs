@@ -42,11 +42,13 @@ namespace NintendoSpy
 
         public M64(string _fileName, IControllerReader reader)
         {
-            while(File.Exists(_fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64")){
+            System.IO.Directory.CreateDirectory("./movies");
+
+            while (File.Exists("./movies/" + _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64")){
                 fileNumber++;
             }
 
-            fileName = _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64";
+            fileName = "./movies/" + _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64";
 
             writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
 
