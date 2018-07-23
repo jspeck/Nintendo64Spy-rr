@@ -15,6 +15,7 @@ namespace NintendoSpy
         BinaryWriter writer;
         int numOfWrites = 0;
         byte[] lastPacket = new byte[4];
+        bool recording = false;
 
         int signature = 0x1A34364D;        // 0x4D36341A
         int version = 3;
@@ -37,18 +38,26 @@ namespace NintendoSpy
         string soundPlugin = "Jabo's DirectSound 1.6";        // 64 byte ascii string
         string inputPlugin = "TAS Input Plugin 0.6";          // 64 byte ascii string
         string rspPlugin = "RSP emulation Plugin";            // 64 byte ascii string
-        string author = "USER";                    // 222-byte utf-8 string
-        string movieDescription = "TAS File recorded from console";                    // 256-byte utf-8 string
+        string author = "USER";                    // 222-byte utf-8 string     placeholder
+        string movieDescription = "TAS File recorded from console";                    // 256-byte utf-8 string     placeholder
 
         public M64(string _fileName, IControllerReader reader)
         {
+            createFileName(_fileName);
+            createFile();
+
+            reader.ControllerStateChanged += reader_ControllerStateChanged;
+        }
+
+        private void createFileName(string _fileName) {
             System.IO.Directory.CreateDirectory("./movies");
 
-            while (File.Exists("./movies/" + _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64")){
+            while (File.Exists("./movies/" + _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64"))
+            {
                 fileNumber++;
             }
 
-            if (!File.Exists("./movies/" + _fileName + ".m64"))
+            if (!File.Exists("./movies/" + _fileName + ".m64") && _fileName != "movie")
             {
                 fileName = "./movies/" + _fileName + ".m64";
             }
@@ -56,13 +65,8 @@ namespace NintendoSpy
             {
                 fileName = "./movies/" + _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64";
             }
-
-            writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
-
-            reader.ControllerStateChanged += reader_ControllerStateChanged;
-
-            createFile();
         }
+
 
         private static byte[] ASCIIToByteArray(string str, int length)
         {
@@ -76,6 +80,8 @@ namespace NintendoSpy
 
         private void createFile()
         {
+            writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
+
             writer.Write(signature);
             writer.Write(version);
             writer.Write(uid);
@@ -109,6 +115,8 @@ namespace NintendoSpy
             writer.Write(ASCIIToByteArray(rspPlugin, 64));
             writer.Write(UTF8ToByteArray(author, 222));
             writer.Write(UTF8ToByteArray(movieDescription, 256));
+
+            recording = true;
         }
 
         void reader_ControllerStateChanged(IControllerReader reader, ControllerState newState)
@@ -129,6 +137,8 @@ namespace NintendoSpy
             //writer.Write((numOfWrites));
 
             writer.Close();
+
+            recording = false;
         }
 
     }
