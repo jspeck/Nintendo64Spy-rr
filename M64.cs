@@ -43,9 +43,7 @@ namespace NintendoSpy
 
         public M64(string _fileName, IControllerReader reader)
         {
-            createFileName(_fileName);
-            createFile();
-
+            createFile(_fileName);
             reader.ControllerStateChanged += reader_ControllerStateChanged;
         }
 
@@ -78,8 +76,10 @@ namespace NintendoSpy
             return Encoding.UTF8.GetBytes(str.PadRight(length, '\0'));
         }
 
-        private void createFile()
+        private void createFile(string _fileName)
         {
+            createFileName(_fileName);
+
             writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
 
             writer.Write(signature);
