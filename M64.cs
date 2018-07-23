@@ -37,8 +37,8 @@ namespace NintendoSpy
         string soundPlugin = "Jabo's DirectSound 1.6";        // 64 byte ascii string
         string inputPlugin = "TAS Input Plugin 0.6";          // 64 byte ascii string
         string rspPlugin = "RSP emulation Plugin";            // 64 byte ascii string
-        string author = "minikori deftek";                    // 222-byte utf-8 string
-        string movieDescription = "tests";                    // 256-byte utf-8 string
+        string author = "USER";                    // 222-byte utf-8 string
+        string movieDescription = "TAS File recorded from console";                    // 256-byte utf-8 string
 
         public M64(string _fileName, IControllerReader reader)
         {
@@ -48,7 +48,14 @@ namespace NintendoSpy
                 fileNumber++;
             }
 
-            fileName = "./movies/" + _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64";
+            if (!File.Exists("./movies/" + _fileName + ".m64"))
+            {
+                fileName = "./movies/" + _fileName + ".m64";
+            }
+            else
+            {
+                fileName = "./movies/" + _fileName + fileNumber.ToString().PadLeft(4, '0') + ".m64";
+            }
 
             writer = new BinaryWriter(File.Open(fileName, FileMode.Create));
 
