@@ -10,7 +10,7 @@ namespace NintendoSpy
 {
     class M64
     {
-        string fileName = "movie";
+        string fileName = "movie0000";
         int fileNumber = 0;
         BinaryWriter writer;
         int numOfWrites = 0;
@@ -55,7 +55,11 @@ namespace NintendoSpy
                 fileNumber++;
             }
 
-            if (!File.Exists("./movies/" + _fileName + ".m64") && _fileName != "movie")
+            if (!File.Exists("./movies/" + _fileName + ".m64") && _fileName != "movie0000")
+            {
+                fileName = "./movies/" + _fileName + ".m64";
+            }
+            else if (!File.Exists("./movies/" + _fileName + ".m64") && _fileName == "movie0000")
             {
                 fileName = "./movies/" + _fileName + ".m64";
             }

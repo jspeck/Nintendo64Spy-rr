@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="TasWindow" Height="300" Width="300">
     <Grid>
-        
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="78,33,0,0" TextWrapping="Wrap" Text="movie0000" VerticalAlignment="Top" Width="147"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,33,0,0" TextWrapping="Wrap" Text="File" VerticalAlignment="Top" Height="23" Width="63" FontSize="14" TextAlignment="Center"/>
+        <Button x:Name="button" Content="Record" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" Width="63" Height="23"/>
+
     </Grid>
 </Window>
